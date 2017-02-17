@@ -1,5 +1,6 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
+let mapleader=","
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -16,6 +17,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
 " plugin from http://vim-scripts.org/vim/scripts.html
 Plugin 'ctrlpvim/ctrlp.vim'
+let g:ctrlp_max_files=0
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
@@ -24,6 +26,14 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'zopim/vim-jxml'
 Plugin 'scrooloose/syntastic'
 Plugin 'Valloric/YouCompleteMe'
+
+Plugin 'wesQ3/vim-windowswap'
+
+" plugin from https://github.com/edkolev/tmuxline.vim
+Plugin 'edkolev/tmuxline.vim'
+" plugin from https://github.com/vim-airline/vim-airline#tmuxline
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -65,10 +75,20 @@ autocmd vimrc BufNewFile,BufRead *.jxml set filetype=javascript noexpandtab
 " set statusline+=%*
 set statusline=%f
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let g:syntastic_jxml_checkers = ['jxmlhint']
+
+let g:syntastic_mode_map = { 'mode': 'passive',
+                           \ 'active_filetypes': [],
+                           \ 'passive_filetypes': [] }
+
+" Ctrl-P
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)|node_modules|bin$',
+  \ 'file': '\v\.(exe|so|dll|swo|swp)$'
+  \ }
 
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -80,9 +100,6 @@ set wildmode=list:full
 
 "Remove trailing spaces before saving
 autocmd vimrc BufWritePre * :%s/\s\+$//e
-
-"Ctags
-nnoremap <leader>. :CtrlPTag<cr>
 
 "Search within selected lines
 function! RangeSearch(direction)
@@ -99,3 +116,62 @@ function! RangeSearch(direction)
 endfunction
 vnoremap <silent> / :<C-U>call RangeSearch('/')<CR>:if strlen(g:srchstr) > 0\|exec '/'.g:srchstr\|endif<CR>
 vnoremap <silent> ? :<C-U>call RangeSearch('?')<CR>:if strlen(g:srchstr) > 0\|exec '?'.g:srchstr\|endif<CR>
+
+" make backspace work
+set backspace=2
+
+set encoding=utf-8
+set laststatus=2
+
+" let g:tmuxline_powerline_separators = 0
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tmuxline#enabled = 0
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline_theme = 'ravenpower'
+let g:Powerline_symbols = 'fancy'
+
+set guifont=Liberation\ Mono\ for\ Powerline\ 10
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.maxlinenr = '☰'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = '∄'
+let g:airline_symbols.whitespace = 'Ξ'
+
+let g:tmuxline_preset = {
+      \'a'    : '#S:#W',
+      \'b disabled'    : '',
+      \'c disabled'    : '',
+      \'win'  : ['#I', '#W'],
+      \'cwin' : ['#I', '#W', ''],
+      \'x disabled'    : '',
+      \'y'    : ['%a', '%Y-%m-%d'],
+      \'z'    : '#(whoami)'}
+let g:tmuxline_separators = {
+    \ 'left' : '',
+    \ 'left_alt': '>',
+    \ 'right' : '',
+    \ 'right_alt' : '<',
+    \ 'space' : ' '}
+
+let g:airline_section_c = '%<%F%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
+
+"Tmuxline - :TmuxlineSnapshot! ~/.tmuxline.tmux.conf
