@@ -35,6 +35,9 @@ Plugin 'edkolev/tmuxline.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
+" plugin from https://github.com/nvie/vim-flake8
+Plugin 'nvie/vim-flake8'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -176,3 +179,5 @@ let g:tmuxline_separators = {
 let g:airline_section_c = '%<%F%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#'
 
 "Tmuxline - :TmuxlineSnapshot! ~/.tmuxline.tmux.conf
+"
+let &colorcolumn=join(range(81,999),",")
